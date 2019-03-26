@@ -100,7 +100,7 @@ exports.getAllPrizes = ( req, res, next ) => {
         } );
 
         // Respond with the completed map.
-        res.json( prizeMap );
+        res.json( { "prizes" : prizeMap } );
     } );
 };
 
@@ -124,7 +124,7 @@ exports.updatePrize = ( req, res, next ) => {
 };
 
 exports.redeemPrize = ( req, res, next ) => {
-    if ( ObjectId.isValid( req.params.id ) && ObjectId.isValid( req.body.playerId ) )
+    if ( ObjectId.isValid( req.params.id ) && req.body.playerId )
     {
         Prize.findById( req.params.id, ( err, prize ) => {
             if ( err )
@@ -140,7 +140,7 @@ exports.redeemPrize = ( req, res, next ) => {
             if ( 0 < prize.availableQuantity )
             {
                 // Prize is in stock, look up the player redeeming the prize.
-                Player.findById( req.body.playerId, ( err, player ) => {
+                Player.findOne( { playerId : req.body.playerId }, ( err, player ) => {
                     if ( err )
                     {
                         return next( boom.badImplementation( err ) );

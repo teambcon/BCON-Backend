@@ -86,7 +86,7 @@ exports.getAllGames = ( req, res, next ) => {
         } );
 
         // Respond with the completed map.
-        res.json( gameMap );
+        res.json( { "games" : gameMap } );
     } );
 };
 

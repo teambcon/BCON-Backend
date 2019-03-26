@@ -11,7 +11,7 @@ var ObjectId = mongoose.Schema.Types.ObjectId;
 var GameSchema = new Schema( {
     name : { type : String, required : true },
     tokenCost : { type : Number, required : true },
-    topPlayer : { type : ObjectId }
+    topPlayer : { type : String }
 } );
 
 module.exports = mongoose.model( 'Game', GameSchema );
