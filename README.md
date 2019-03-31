@@ -24,6 +24,7 @@ For each of the supported collections, there exist properties that may be of int
 | Property   | Type       | Required | Unique | Description |
 | ---------- | ---------- | -------- | ------ | ----------- |
 | _id        | `ObjectId` | Yes      | Yes    | Generated ID from the database. |
+| playerId   | `String`   | Yes      | Yes    | Unique ID from the RFID card, used for making player-related requests with an ID as a parameter. |
 | firstName  | `String`   | Yes      | No     | First name of the player. |
 | lastName   | `String`   | Yes      | No     | Last name of the player. |
 | screenName | `String`   | Yes      | Yes    | Screen name selected by the player for display within the arcade.
@@ -66,9 +67,9 @@ Requests are made to the server using standard HTTP protocol. With the exception
 | `/games/:id/update`   | PUT         | <ul><li>`name` (optional)</li><li>`tokenCost` (optional)</li><li>`topPlayer` (optional)</li></ul> | Updates the game object associated with the specified ID with the specified properties. One or many properties can be updated in a single request. |
 | `/games/:id/delete`   | DELETE      | | Deletes the game object associated with the specified ID and returns a confirmation message. |
 | `/players`            | GET         | | Returns all player objects currently in the database. |
-| `/players/create`     | POST        | <ul><li>`firstName`</li><li>`lastName`</li><li>`screenName`</li></ul> | Creates a new player with the specified first name, last name, and screen name and returns the new object. |
+| `/players/create`     | POST        | <ul><li>`playerId`</li><li>`firstName`</li><li>`lastName`</li><li>`screenName`</li></ul> | Creates a new player with the specified ID, first name, last name, and screen name and returns the new object. |
 | `/players/:id`        | GET         | | Returns the player object associated with the specified ID. |
-| `/players/:id/update` | PUT         | <ul><li>`firstName` (optional)</li><li>`lastName` (optional)</li><li>`screenName` (optional)</li><li>`tickets` (optional)</li></ul> | Updates the player object associated with the specified ID with the specified properties. One or many properties can be updated in a single request. |
+| `/players/:id/update` | PUT         | <ul><li>`playerId` (optional)</li><li>`firstName` (optional)</li><li>`lastName` (optional)</li><li>`screenName` (optional)</li><li>`tickets` (optional)</li></ul> | Updates the player object associated with the specified ID with the specified properties. One or many properties can be updated in a single request. |
 | `/players/:id/publishstats` | POST  | <ul><li>`gameId`</li><li>`ticketsEarned`</li><li>`highScore`</li></ul> | Updates the stored game statistics for the player associated with the specified ID and returns the player object. |
 | `/players/:id/delete` | DELETE      | | Deletes the player object associated with the specified ID and returns a confirmation message. This does _not_ automatically clear the deleted player from any top scores held within games. |
 | `/prizes`             | GET         | | Returns all prize objects currently in the database. |
@@ -110,7 +111,7 @@ MONGODB_URI = 'mongodb://username:password@somehost:12345/db'
 
 ### Starting the Server
 
-The server can be started simply by executing `node server.js` from a console. Confirmation messages will appear on screen indicating that the server has started and that the database connection was successful. Any errors will have their stack traces outputted to the console.
+The server can be started simply by executing `node server.js` from a console. To start a development configuration, run `npm start`, which will start the server locally on port 3000. Confirmation messages will appear on screen indicating that the server has started and that the database connection was successful. Any errors will have their stack traces outputted to the console.
 
 #### Environment Variables
 
