@@ -77,16 +77,16 @@ exports.getAllGames = ( req, res, next ) => {
             return next( boom.badImplementation( err ) );
         }
 
-        // Construct an empty map to store the games in.
-        var gameMap = {};
+        // Construct an empty array to store the games in.
+        var gameArray = [];
 
-        // Insert each game into the map, with the ID as the key.
+        // Push each game onto the array.
         games.forEach( ( game ) => {
-            gameMap[ game._id ] = game;
+            gameArray.push( game );
         } );
 
-        // Respond with the completed map.
-        res.json( { "games" : gameMap } );
+        // Respond with the completed array.
+        res.json( { "games" : gameArray } );
     } );
 };
 

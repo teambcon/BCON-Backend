@@ -91,16 +91,16 @@ exports.getAllPrizes = ( req, res, next ) => {
             return next( boom.badImplementation( err ) );
         }
 
-        // Construct an empty map to store the prizes in.
-        var prizeMap = {};
+        // Construct an empty array to store the prizes in.
+        var prizeArray = [];
 
-        // Insert each prize into the map, with the ID as the key.
+        // Push each prize onto the array.
         prizes.forEach( ( prize ) => {
-            prizeMap[ prize._id ] = prize;
+            prizeArray.push( prize );
         } );
 
-        // Respond with the completed map.
-        res.json( { "prizes" : prizeMap } );
+        // Respond with the completed array.
+        res.json( { "prizes" : prizeArray } );
     } );
 };
 

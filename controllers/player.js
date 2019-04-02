@@ -73,16 +73,16 @@ exports.getAllPlayers = ( req, res, next ) => {
             return next( boom.badImplementation( err ) );
         }
 
-        // Construct an empty map to store the players in.
-        var playerMap = {};
+        // Construct an empty array to store the players in.
+        var playerArray = [];
 
-        // Insert each player into the map, with the ID as the key.
+        // Push each game onto the array.
         players.forEach( ( player ) => {
-            playerMap[ player.playerId ] = player;
+            playerArray.push( player );
         } );
 
-        // Respond with the completed map.
-        res.json( { "players" : playerMap } );
+        // Respond with the completed array.
+        res.json( { "players" : playerArray } );
     } );
 };
 
