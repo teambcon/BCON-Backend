@@ -12,7 +12,7 @@ var PrizeSchema = new Schema( {
     description : { type : String },
     ticketCost : { type : Number, required : true },
     availableQuantity : { type : Number, required : true },
-    image: { data : Buffer, contentType : String }
+    imageData: { type : String }
 } );
 
 module.exports = mongoose.model( 'Prize', PrizeSchema );

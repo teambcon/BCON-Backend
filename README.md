@@ -53,7 +53,7 @@ There shall only be a single entry per game in this player property. The server 
 | description       | `String`   | No       | No     | Brief user-facing prize description. |
 | ticketCost        | `Number`   | Yes      | No     | Tickets required for a single unit. |
 | availableQuantity | `Number`   | Yes      | No     | Number of available units. |
-| image             | `Object`   | No       | No     | Prize image, consisting of a data buffer and content type. |
+| imageData         | `String`   | No       | No     | Prize image, consisting of base64-encoded string representing the image. |
 
 ## Supported Requests
 

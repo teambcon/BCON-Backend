@@ -32,9 +32,9 @@ exports.createPrize = ( req, res, next ) => {
         }
 
         // Check if an optional image was supplied.
-        if ( req.body.image )
+        if ( req.body.imageData )
         {
-            newPrize.image = req.body.image;
+            newPrize.imageData = req.body.imageData;
         }
 
         // Attempt to save the new prize to the database.
