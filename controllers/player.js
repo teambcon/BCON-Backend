@@ -8,6 +8,7 @@ const boom = require( 'boom' );
 const Game = require( '../models/game' );
 const ObjectId = require( 'mongoose' ).Types.ObjectId;
 const Player = require( '../models/player' );
+const Server = require( '../server' );
 
 // Common error messages.
 const errorBadId = 'The specified ID is invalid!';
@@ -168,6 +169,7 @@ exports.publishStats = ( req, res, next ) => {
                     return next( boom.badImplementation( err ) );
                 }
 
+                pushStats();
                 res.json( player );
             } );
         } );
@@ -176,6 +178,50 @@ exports.publishStats = ( req, res, next ) => {
     {
         return next( boom.badRequest( 'Game ID, tickets earned, and high score are required to publish stats!' ) );
     }
+};
+
+var pushStats = exports.pushAllStats = () => {
+    // Query the database for all documents in the players collection.
+    Player.find( {}, ( err, players ) => {
+        if ( err )
+        {
+            console.log( err );
+        }
+        else
+        {
+            // Construct an empty array to store the player stats in.
+            var statsArray = [];
+
+            // Push the relevant information onto the array.
+            players.forEach( ( player ) => {
+                // Only continue if this player has any stored stats.
+                if ( 0 < player.gameStats.length )
+                {
+                    var statsObject = { "screenName" : player.screenName, "gameStats" : [] };
+
+                    // Populate the relevant stats information.
+                    for ( var i = 0; i < player.gameStats.length; i++ )
+                    {
+                        statsObject.gameStats.push( player.gameStats[ i ] );
+                    }
+
+                    // Sort the player's game stats by high score in descending order.
+                    statsObject.gameStats.sort( ( a, b ) => {
+                        return b.highScore - a.highScore;
+                    } );
+
+                    // Push the stats object onto the array.
+                    statsArray.push( statsObject );
+                }
+            } );
+
+            // Notify connected clients of the new data.
+            if ( 0 < statsArray.length )
+            {
+                Server.io.emit( 'stats', { "stats" : statsArray } );
+            }
+        }
+    } );
 };
 
 exports.deletePlayer = ( req, res, next ) => {

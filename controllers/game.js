@@ -7,6 +7,7 @@
 const boom = require( 'boom' );
 const Game = require( '../models/game' );
 const ObjectId = require( 'mongoose' ).Types.ObjectId;
+const Server = require( '../server' );
 
 // Common error messages.
 const errorBadId = 'The specified ID is invalid!';
@@ -32,6 +33,7 @@ exports.createGame = ( req, res, next ) => {
             }
 
             // Respond with the new game object.
+            pushGames();
             res.json( newGame );
         } );
     }
@@ -90,6 +92,32 @@ exports.getAllGames = ( req, res, next ) => {
     } );
 };
 
+var pushGames = exports.pushAllGames = () => {
+    // Query the database for all documents in the games collection.
+    Game.find( {}, ( err, games ) => {
+        if ( err )
+        {
+            console.log( err );
+        }
+        else
+        {
+            // Construct an empty array to store the games in.
+            var gameArray = [];
+
+            // Push each game onto the array.
+            games.forEach( ( game ) => {
+                gameArray.push( game );
+            } );
+
+            // Notify connected clients of the new data.
+            if ( 0 < gameArray.length )
+            {
+                Server.io.emit( 'games', { "games" : gameArray } );
+            }
+        }
+    } );
+};
+
 exports.updateGame = ( req, res, next ) => {
     if ( ObjectId.isValid( req.params.id ) )
     {
@@ -104,6 +132,7 @@ exports.updateGame = ( req, res, next ) => {
                 return next( boom.badRequest( errorNotFound ) );
             }
 
+            pushGames();
             res.json( game );
         } );
     }
@@ -124,6 +153,7 @@ exports.deleteGame = ( req, res, next ) => {
             }
 
             // Respond with a confirmation.
+            pushGames();
             res.send( 'Deleted game ' + req.params.id + '.' );
         } );
     }
