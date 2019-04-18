@@ -89,6 +89,14 @@ For example, sending an invalid `ObjectId` to any of the above parameterized req
 {"statusCode":400,"error":"Bad Request","message":"The specified ID is invalid!"}
 ```
 
+## Real-Time Socket Communication
+
+The backend also runs a secondary server on a dedicated port that can handle one or many clients using [Socket.IO](https://socket.io). This server publishes events related to game statistics updates as they become available in the backend database.
+
+Each time these date are modified, this server will emit an event and push the new data to all connected clients in form of a JSON payload containing only relevant information.
+
+The port for this server can be specified via the `SOCKET_PORT` environment variable, or will default to 3001 or 8081, depending on if development mode is set (see the final section).
+
 ## Running the Server
 
 ### Prerequisites
